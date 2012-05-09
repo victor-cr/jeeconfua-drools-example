@@ -1,0 +1,1 @@
+Demonstration of JBoss Drools on JEEConf 2012 Ukraine

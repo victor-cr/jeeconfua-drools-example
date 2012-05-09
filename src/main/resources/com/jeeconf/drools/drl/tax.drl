@@ -1,0 +1,58 @@
+package com.jeeconf.drools.drl
+dialect "mvel"
+
+import java.math.BigDecimal;
+
+import com.jeeconf.drools.bean.*;
+
+global org.slf4j.Logger log;
+
+// START Prefetch
+
+rule "Fetch all parties"
+when
+    TransactionRecord( $party : party )
+    not( Party( name == $party.name ) )
+then
+    insert( $party );
+end
+
+rule "Fetch all counter parties"
+when
+    TransactionRecord( $party : counterParty )
+    not( Party( name == $party.name ) )
+then
+    insert( $party );
+end
+
+// END Prefetch
+
+rule "Fixed tax - category I"
+when
+    $party : Taxpayer( category == Category.I )
+then
+    insert( new TaxRecord( $party, 100 ) )
+end
+
+rule "Fixed tax - category II"
+when
+    $party : Taxpayer( category == Category.II )
+then
+    insert( new TaxRecord( $party, 200 ) )
+end
+
+rule "Percentage tax - category III"
+when
+    $party : Taxpayer( category == Category.III )
+    $transaction : TransactionRecord( party == $party, amount > 0, $amount : amount )
+then
+    insert( new TaxRecord( $party, $amount * 0.05 ) )
+end
+
+rule "Percentage tax - general case"
+when
+    $party : Taxpayer( category == Category.NONE )
+    $transaction : TransactionRecord( party == $party, $amount : amount )
+then
+    insert( new TaxRecord( $party, $amount * 0.17 ) )
+end

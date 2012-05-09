@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+    <util:list id="revenueRecords" value-type="com.jeeconf.drools.bean.TransactionRecord">
+        <bean class="com.jeeconf.drools.bean.TransactionRecord">
+            <constructor-arg index="0" ref="victor.polischuk"/>
+            <constructor-arg index="1" ref="luxoft"/>
+            <constructor-arg index="2" value="1230.01"/>
+        </bean>
+    </util:list>
+</beans>
