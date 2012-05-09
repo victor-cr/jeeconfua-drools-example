@@ -6,7 +6,7 @@ package com.jeeconf.drools.bean;
  * @author Victor Polischuk
  */
 public class Entrepreneur extends Taxpayer implements Party {
-    private final Category category;
+    private Category category;
 
     public Entrepreneur(String name, Category category) {
         super(name);
@@ -17,5 +17,9 @@ public class Entrepreneur extends Taxpayer implements Party {
     @Override
     public Category getCategory() {
         return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

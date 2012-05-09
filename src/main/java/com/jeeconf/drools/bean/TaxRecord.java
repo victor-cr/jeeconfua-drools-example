@@ -13,27 +13,19 @@ import java.math.RoundingMode;
  * @author Victor Polischuk
  */
 public class TaxRecord {
-    private final Party party;
+    private final Taxpayer party;
     private final BigDecimal amount;
 
-    public TaxRecord(Party party, BigDecimal amount) {
+    public TaxRecord(Taxpayer party, BigDecimal amount) {
         this.party = party;
         this.amount = amount.setScale(2, RoundingMode.HALF_EVEN);
     }
 
-    public Party getParty() {
+    public Taxpayer getParty() {
         return party;
     }
 
     public BigDecimal getAmount() {
         return amount;
-    }
-
-    public boolean isSelling() {
-        return amount != null && BigDecimal.ZERO.compareTo(amount) < 0;
-    }
-
-    public boolean isPurchasing() {
-        return amount != null && BigDecimal.ZERO.compareTo(amount) > 0;
     }
 }

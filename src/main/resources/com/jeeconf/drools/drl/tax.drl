@@ -31,14 +31,14 @@ rule "Fixed tax - category I"
 when
     $party : Taxpayer( category == Category.I )
 then
-    insert( new TaxRecord( $party, 100 ) )
+    insertLogical( new TaxRecord( $party, 100 ) )
 end
 
 rule "Fixed tax - category II"
 when
     $party : Taxpayer( category == Category.II )
 then
-    insert( new TaxRecord( $party, 200 ) )
+    insertLogical( new TaxRecord( $party, 200 ) )
 end
 
 rule "Percentage tax - category III"
@@ -46,7 +46,7 @@ when
     $party : Taxpayer( category == Category.III )
     $transaction : TransactionRecord( party == $party, amount > 0, $amount : amount )
 then
-    insert( new TaxRecord( $party, $amount * 0.05 ) )
+    insertLogical( new TaxRecord( $party, $amount * 0.05 ) )
 end
 
 rule "Percentage tax - general case"
@@ -56,3 +56,48 @@ when
 then
     insert( new TaxRecord( $party, $amount * 0.17 ) )
 end
+
+// Limits
+
+rule "Limit exceeded - category I"
+when
+    $party : Taxpayer( category == Category.I )
+    BigDecimal( plus > 150000) // 150 K
+           from accumulate( TransactionRecord( party == $party, amount > 0, $amount : amount ),
+                            init( BigDecimal sum = 0; ),
+                            action( sum += $amount; ),
+                            result( sum ) )
+then
+    modify( $party ) {
+        category = Category.NONE;
+    }
+end
+
+rule "Limit exceeded - category II"
+when
+    $party : Taxpayer( category == Category.II )
+    BigDecimal( plus > 1000000) // 1 M
+           from accumulate( TransactionRecord( party == $party, amount > 0, $amount : amount ),
+                            init( BigDecimal sum = 0; ),
+                            action( sum += $amount; ),
+                            result( sum ) )
+then
+    modify( $party ) {
+        category = Category.NONE;
+    }
+end
+
+rule "Limit exceeded - category III"
+when
+    $party : Taxpayer( category == Category.III )
+    BigDecimal( plus > 3000000) // 3 M
+           from accumulate( TransactionRecord( party == $party, amount > 0, $amount : amount ),
+                            init( BigDecimal sum = 0; ),
+                            action( sum += $amount; ),
+                            result( sum ) )
+then
+    modify( $party ) {
+        category = Category.NONE;
+    }
+end
+

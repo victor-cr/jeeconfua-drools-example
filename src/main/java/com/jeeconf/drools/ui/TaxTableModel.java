@@ -13,8 +13,8 @@ import java.util.List;
  * @author Victor Polischuk
  */
 public class TaxTableModel extends AbstractTableModel {
-    private static final Class[] COLUMN_CLASSES = {String.class, BigDecimal.class};
-    private static final String[] COLUMN_NAMES = {"Party", "Tax"};
+    private static final Class[] COLUMN_CLASSES = {String.class, String.class, BigDecimal.class};
+    private static final String[] COLUMN_NAMES = {"Party", "Category", "Tax"};
 
     private List<TaxRecord> records;
 
@@ -57,6 +57,8 @@ public class TaxTableModel extends AbstractTableModel {
             case 0:
                 return taxRecord.getParty().getName();
             case 1:
+                return taxRecord.getParty().getCategory().getDescription();
+            case 2:
                 return taxRecord.getAmount();
         }
 
