@@ -1,10 +1,9 @@
 package com.jeeconf.drools.bean;
 
 /**
- * JavaDoc here
+ * Party roles
  *
  * @author Victor Polischuk
- * @since 13.05.12 9:34
  */
 public enum Role {
     STUDENT,

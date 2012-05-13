@@ -23,13 +23,13 @@
         </constructor-arg>
     </bean>
 
-    <bean id="revenueDao" class="com.jeeconf.drools.dao.impl.RevenueDaoImpl">
+    <bean id="revenueDao" class="com.jeeconf.drools.dao.impl.TransactionDaoImpl">
         <constructor-arg ref="revenueRecords"/>
     </bean>
 
     <bean id="taxService" class="com.jeeconf.drools.service.TaxService">
         <property name="partyDao" ref="partyDao"/>
-        <property name="revenueDao" ref="revenueDao"/>
+        <property name="transactionDao" ref="revenueDao"/>
         <property name="knowledgeBase" ref="knowledgeBase"/>
     </bean>
 

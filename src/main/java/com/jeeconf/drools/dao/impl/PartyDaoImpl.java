@@ -13,6 +13,7 @@ import com.jeeconf.drools.dao.PartyDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,6 +30,19 @@ public class PartyDaoImpl implements PartyDao {
     public PartyDaoImpl(List<Company> companies, List<Entrepreneur> entrepreneurs) {
         this.companies = companies;
         this.entrepreneurs = entrepreneurs;
+    }
+
+    @Override
+    public List<Party> findAll() {
+        LOG.debug("Method 'findAll' is executing");
+
+        return Lists.newArrayList(
+                Iterables.concat(
+                        companies,
+                        entrepreneurs,
+                        Collections.singletonList(Person.getInstance())
+                )
+        );
     }
 
     @Override

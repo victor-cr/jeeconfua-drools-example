@@ -42,4 +42,9 @@ public class TransactionRecord {
     public boolean isDebit() {
         return amount != null && BigDecimal.ZERO.compareTo(amount) > 0;
     }
+
+    @Override
+    public String toString() {
+        return party.toString() + ":" + amount;
+    }
 }

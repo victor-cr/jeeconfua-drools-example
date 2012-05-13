@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Victor Polischuk
  */
-public interface RevenueDao {
+public interface TransactionDao {
     List<TransactionRecord> findAll();
 
     List<TransactionRecord> findRecordsByParty(Party party);

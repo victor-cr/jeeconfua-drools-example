@@ -6,24 +6,31 @@ import java.math.BigDecimal;
 
 import com.jeeconf.drools.bean.*;
 
+global com.jeeconf.drools.dao.TransactionDao dao;
 global org.slf4j.Logger log;
 
 // START Prefetch
 
-rule "Fetch all parties"
+rule "Fetch all transactions"
+dialect "java"
+salience 50
 when
-    TransactionRecord( $party : party )
-    not( Party( this == $party ) )
+    $party : Taxpayer()
+    not( TransactionRecord( party == $party ) )
 then
-    insert( $party );
-end
+    List<TransactionRecord> records = dao.findRecordsByParty($party);
 
-rule "Fetch all counter parties"
-when
-    TransactionRecord( $party : counterParty )
-    not( Party( this == $party ) )
-then
-    insert( $party );
+    if ( records == null || records.isEmpty() ) {
+        log.info( "Insert dummy transaction record for " + $party );
+
+        insert( new TransactionRecord( $party, $party, BigDecimal.ZERO ) );
+    } else {
+        for ( TransactionRecord fact : records ) {
+            log.info( "Insert transaction record: " + fact );
+
+            insert( fact );
+        }
+    }
 end
 
 // END Prefetch

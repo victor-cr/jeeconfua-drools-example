@@ -1,16 +1,14 @@
 package com.jeeconf.drools.service;
 
-import com.jeeconf.drools.bean.Category;
 import com.jeeconf.drools.bean.Company;
 import com.jeeconf.drools.bean.Entrepreneur;
 import com.jeeconf.drools.bean.Party;
 import com.jeeconf.drools.bean.Person;
 import com.jeeconf.drools.bean.TaxRecord;
-import com.jeeconf.drools.bean.Taxpayer;
 import com.jeeconf.drools.bean.TotalRecord;
 import com.jeeconf.drools.bean.TransactionRecord;
 import com.jeeconf.drools.dao.PartyDao;
-import com.jeeconf.drools.dao.RevenueDao;
+import com.jeeconf.drools.dao.TransactionDao;
 import org.drools.ClassObjectFilter;
 import org.drools.KnowledgeBase;
 import org.drools.runtime.StatefulKnowledgeSession;
@@ -32,7 +30,7 @@ public class TaxService {
     private final static Logger LOG = LoggerFactory.getLogger(TaxService.class);
 
     private PartyDao partyDao;
-    private RevenueDao revenueDao;
+    private TransactionDao transactionDao;
     private KnowledgeBase knowledgeBase;
 
     @Required
@@ -41,8 +39,8 @@ public class TaxService {
     }
 
     @Required
-    public void setRevenueDao(RevenueDao revenueDao) {
-        this.revenueDao = revenueDao;
+    public void setTransactionDao(TransactionDao transactionDao) {
+        this.transactionDao = transactionDao;
     }
 
     @Required
@@ -77,17 +75,17 @@ public class TaxService {
     }
 
     public List<TransactionRecord> getRevenueRecordList() {
-        return revenueDao.findAll();
+        return transactionDao.findAll();
     }
 
     public void addTransaction(Party party, Party counterParty, BigDecimal amount) {
         Person person = partyDao.findPerson();
 
         if (person.equals(counterParty)) {
-            revenueDao.addRecord(new TransactionRecord(party, counterParty, amount));
+            transactionDao.addRecord(new TransactionRecord(party, counterParty, amount));
         } else {
-            revenueDao.addRecord(new TransactionRecord(party, counterParty, amount));
-            revenueDao.addRecord(new TransactionRecord(counterParty, party, amount.negate()));
+            transactionDao.addRecord(new TransactionRecord(party, counterParty, amount));
+            transactionDao.addRecord(new TransactionRecord(counterParty, party, amount.negate()));
         }
     }
 
@@ -95,23 +93,12 @@ public class TaxService {
         StatefulKnowledgeSession session = knowledgeBase.newStatefulKnowledgeSession();
 
         try {
+            session.setGlobal("dao", transactionDao);
             session.setGlobal("log", LOG);
 
-            List<Taxpayer> taxpayerI = partyDao.findPartyByCategory(Category.I);
-            List<Taxpayer> taxpayerII = partyDao.findPartyByCategory(Category.II);
-            List<TransactionRecord> transactions = revenueDao.findAll();
+            List<Party> parties = partyDao.findAll();
 
-            for (Taxpayer object : taxpayerI) {
-                LOG.debug("Insert fact: " + object);
-                session.insert(object);
-            }
-
-            for (Taxpayer object : taxpayerII) {
-                LOG.debug("Insert fact: " + object);
-                session.insert(object);
-            }
-
-            for (TransactionRecord object : transactions) {
+            for (Party object : parties) {
                 LOG.debug("Insert fact: " + object);
                 session.insert(object);
             }
