@@ -57,7 +57,7 @@ public class TaxTableModel extends AbstractTableModel {
             case 0:
                 return taxRecord.getParty().getName();
             case 1:
-                return taxRecord.getParty().getCategory().getDescription();
+                return taxRecord.isCorrection() ? "<correction>" : taxRecord.getParty().getCategory().getDescription();
             case 2:
                 return taxRecord.getAmount();
         }

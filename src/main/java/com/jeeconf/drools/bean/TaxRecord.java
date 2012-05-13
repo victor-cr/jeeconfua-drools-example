@@ -15,10 +15,16 @@ import java.math.RoundingMode;
 public class TaxRecord {
     private final Taxpayer party;
     private final BigDecimal amount;
+    private boolean correction;
 
     public TaxRecord(Taxpayer party, BigDecimal amount) {
+        this(party, amount, false);
+    }
+
+    public TaxRecord(Taxpayer party, BigDecimal amount, boolean correction) {
         this.party = party;
         this.amount = amount.setScale(2, RoundingMode.HALF_EVEN);
+        this.correction = correction;
     }
 
     public Taxpayer getParty() {
@@ -27,5 +33,13 @@ public class TaxRecord {
 
     public BigDecimal getAmount() {
         return amount;
+    }
+
+    public boolean isCorrection() {
+        return correction;
+    }
+
+    public void setCorrection(boolean correction) {
+        this.correction = correction;
     }
 }

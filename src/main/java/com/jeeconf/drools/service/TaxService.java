@@ -102,16 +102,21 @@ public class TaxService {
             List<TransactionRecord> transactions = revenueDao.findAll();
 
             for (Taxpayer object : taxpayerI) {
+                LOG.debug("Insert fact: " + object);
                 session.insert(object);
             }
 
             for (Taxpayer object : taxpayerII) {
+                LOG.debug("Insert fact: " + object);
                 session.insert(object);
             }
 
             for (TransactionRecord object : transactions) {
+                LOG.debug("Insert fact: " + object);
                 session.insert(object);
             }
+
+            LOG.info("Fire all rules");
 
             session.fireAllRules();
 

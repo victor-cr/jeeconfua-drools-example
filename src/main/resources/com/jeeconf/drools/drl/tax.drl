@@ -1,6 +1,7 @@
 package com.jeeconf.drools.drl
 dialect "mvel"
 
+import java.util.List;
 import java.math.BigDecimal;
 
 import com.jeeconf.drools.bean.*;
@@ -12,7 +13,7 @@ global org.slf4j.Logger log;
 rule "Fetch all parties"
 when
     TransactionRecord( $party : party )
-    not( Party( name == $party.name ) )
+    not( Party( this == $party ) )
 then
     insert( $party );
 end
@@ -20,7 +21,7 @@ end
 rule "Fetch all counter parties"
 when
     TransactionRecord( $party : counterParty )
-    not( Party( name == $party.name ) )
+    not( Party( this == $party ) )
 then
     insert( $party );
 end
@@ -59,45 +60,53 @@ end
 
 // Limits
 
-rule "Limit exceeded - category I"
-when
-    $party : Taxpayer( category == Category.I )
-    BigDecimal( plus > 150000) // 150 K
+query isOverLimit ( Party $party, BigDecimal $limit )
+    BigDecimal( plus > $limit )
            from accumulate( TransactionRecord( party == $party, amount > 0, $amount : amount ),
                             init( BigDecimal sum = 0; ),
                             action( sum += $amount; ),
                             result( sum ) )
+end
+
+rule "Limit exceeded - category I"
+when
+    $party : Taxpayer( category == Category.I )
+    isOverLimit( $party, 150000; )
 then
     modify( $party ) {
-        category = Category.NONE;
+        category = Category.NONE
     }
 end
 
 rule "Limit exceeded - category II"
 when
     $party : Taxpayer( category == Category.II )
-    BigDecimal( plus > 1000000) // 1 M
-           from accumulate( TransactionRecord( party == $party, amount > 0, $amount : amount ),
-                            init( BigDecimal sum = 0; ),
-                            action( sum += $amount; ),
-                            result( sum ) )
+    isOverLimit( $party, 1000000; )
 then
     modify( $party ) {
-        category = Category.NONE;
+        category = Category.NONE
     }
 end
 
 rule "Limit exceeded - category III"
 when
     $party : Taxpayer( category == Category.III )
-    BigDecimal( plus > 3000000) // 3 M
-           from accumulate( TransactionRecord( party == $party, amount > 0, $amount : amount ),
+    isOverLimit( $party, 3000000; )
+then
+    modify( $party ) {
+        category = Category.NONE
+    }
+end
+
+// Negative tax
+rule "Correct negative taxes"
+when
+    $party : Taxpayer( category == Category.NONE )
+    $sum : BigDecimal( plus < 0 )
+           from accumulate( TaxRecord( party == $party, correction == false, $amount : amount ),
                             init( BigDecimal sum = 0; ),
                             action( sum += $amount; ),
                             result( sum ) )
 then
-    modify( $party ) {
-        category = Category.NONE;
-    }
+    insertLogical( new TaxRecord( $party, $sum.negate(), true ) );
 end
-
