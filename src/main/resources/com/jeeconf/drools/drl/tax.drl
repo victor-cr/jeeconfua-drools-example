@@ -198,7 +198,9 @@ end
 
 rule "Category I and II cannot deal with any company"
 when
-    eval( false ) // Let's do it
+    $party : Taxpayer( category in ( Category.I, Category.II ) )
+    $company : Company()
+    exists( TransactionRecord( party == $party, counterParty == $company ) )
 then
     insertLogical( new HasViolations( $party ) )
 end
