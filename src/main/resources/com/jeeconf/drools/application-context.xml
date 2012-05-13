@@ -14,10 +14,11 @@
         </constructor-arg>
         <constructor-arg index="1">
             <list value-type="com.jeeconf.drools.bean.Entrepreneur">
+                <ref bean="ilia.muromets"/>
                 <ref bean="julia.semechkina"/>
                 <ref bean="moses.wasserman"/>
+                <ref bean="vasiliy.junior"/>
                 <ref bean="victor.polischuk"/>
-                <ref bean="ilia.muromets"/>
             </list>
         </constructor-arg>
     </bean>

@@ -31,6 +31,7 @@ end
 rule "Fixed tax - category I"
 when
     $party : Taxpayer( category == Category.I )
+    not( HasTaxExemption( party == $party ) )
 then
     insertLogical( new TaxRecord( $party, 100 ) )
 end
@@ -38,6 +39,7 @@ end
 rule "Fixed tax - category II"
 when
     $party : Taxpayer( category == Category.II )
+    not( HasTaxExemption( party == $party ) )
 then
     insertLogical( new TaxRecord( $party, 200 ) )
 end
@@ -45,6 +47,7 @@ end
 rule "Percentage tax - category III"
 when
     $party : Taxpayer( category == Category.III )
+    not( HasTaxExemption( party == $party ) )
     $transaction : TransactionRecord( party == $party, amount > 0, $amount : amount )
 then
     insertLogical( new TaxRecord( $party, $amount * 0.05 ) )
@@ -53,9 +56,10 @@ end
 rule "Percentage tax - general case"
 when
     $party : Taxpayer( category == Category.NONE )
+    not( HasTaxExemption( party == $party ) )
     $transaction : TransactionRecord( party == $party, $amount : amount )
 then
-    insert( new TaxRecord( $party, $amount * 0.17 ) )
+    insertLogical( new TaxRecord( $party, $amount * 0.17 ) )
 end
 
 // Limits
@@ -139,4 +143,35 @@ when
 then
     retract( $total )
     insert( new TotalRecord( $party, $total.transactionAmount, $taxSum ) )
+end
+
+// Tax exepmtions
+
+declare HasTaxExemption
+    party : Taxpayer @key
+end
+
+rule "IT company pays 10% of profit"
+when
+    $company : Company( specialRoles contains Role.IT )
+    $transaction : TransactionRecord( party == $company, $amount : amount )
+then
+    insertLogical( new HasTaxExemption( $company ) )
+    insertLogical( new TaxRecord( $company, $amount * 0.10 ) )
+end
+
+rule "IT entrepreneur-student does not pay taxes"
+when
+    $party : Entrepreneur( specialRoles contains Role.IT, specialRoles contains Role.STUDENT )
+then
+    insertLogical( new HasTaxExemption( $party ) )
+    insertLogical( new TaxRecord( $party, 0 ) )
+end
+
+rule "Entrepreneur-orphan or -disabled does not pay taxes"
+when
+    $party : Entrepreneur( specialRoles contains Role.ORPHAN || specialRoles contains Role.DISABLED )
+then
+    insertLogical( new HasTaxExemption( $party ) )
+    insertLogical( new TaxRecord( $party, 0 ) )
 end

@@ -13,6 +13,18 @@
         <constructor-arg index="2" value="III"/>
     </bean>
 
+    <bean id="vasiliy.junior" class="com.jeeconf.drools.bean.Entrepreneur">
+        <constructor-arg index="0" value="Vasiliy Junior"/>
+        <constructor-arg index="1">
+            <list value-type="com.jeeconf.drools.bean.Role">
+                <value>IT</value>
+                <value>ORPHAN</value>
+                <value>STUDENT</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg index="2" value="III"/>
+    </bean>
+
     <bean id="moses.wasserman" class="com.jeeconf.drools.bean.Entrepreneur">
         <constructor-arg index="0" value="Moses Wasserman"/>
         <constructor-arg index="1" value="II"/>
