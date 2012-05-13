@@ -8,17 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Revenue records table model.
+ * Transaction records table model.
  *
  * @author Victor Polischuk
  */
-public class RevenueTableModel extends AbstractTableModel {
+public class TransactionTableModel extends AbstractTableModel {
     private static final Class[] COLUMN_CLASSES = {String.class, BigDecimal.class, String.class};
     private static final String[] COLUMN_NAMES = {"Party", "Amount", "Counter Party"};
 
     private List<TransactionRecord> records;
 
-    public RevenueTableModel() {
+    public TransactionTableModel() {
         this.records = new ArrayList<TransactionRecord>();
     }
 

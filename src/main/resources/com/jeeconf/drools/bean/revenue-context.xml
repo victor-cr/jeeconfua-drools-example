@@ -12,5 +12,20 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
             <constructor-arg index="1" ref="luxoft"/>
             <constructor-arg index="2" value="1230.01"/>
         </bean>
+        <bean class="com.jeeconf.drools.bean.TransactionRecord">
+            <constructor-arg index="0" ref="luxoft"/>
+            <constructor-arg index="1" ref="victor.polischuk"/>
+            <constructor-arg index="2" value="-1230.01"/>
+        </bean>
+        <bean class="com.jeeconf.drools.bean.TransactionRecord">
+            <constructor-arg index="0" ref="julia.semechkina"/>
+            <constructor-arg index="1" ref="someone"/>
+            <constructor-arg index="2" value="2000"/>
+        </bean>
+        <bean class="com.jeeconf.drools.bean.TransactionRecord">
+            <constructor-arg index="0" ref="moses.wasserman"/>
+            <constructor-arg index="1" ref="someone"/>
+            <constructor-arg index="2" value="12000"/>
+        </bean>
     </util:list>
 </beans>

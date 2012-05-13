@@ -1,5 +1,8 @@
 package com.jeeconf.drools.bean;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * A person who shall be treated as a one of the people.
  *
@@ -18,6 +21,11 @@ public final class Person implements Party {
     @Override
     public String getName() {
         return NAME;
+    }
+
+    @Override
+    public List<Role> getSpecialRoles() {
+        return Collections.emptyList();
     }
 
     @Override

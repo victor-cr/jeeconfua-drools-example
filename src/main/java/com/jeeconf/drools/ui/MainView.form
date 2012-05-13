@@ -79,7 +79,7 @@
           </component>
         </children>
       </grid>
-      <splitpane id="d68f0">
+      <splitpane id="2c603">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="200" height="200"/>
@@ -87,40 +87,66 @@
           <gridbag weightx="1.0" weighty="1.0"/>
         </constraints>
         <properties>
-          <continuousLayout value="false"/>
-          <oneTouchExpandable value="false"/>
-          <orientation value="1"/>
-          <resizeWeight value="0.0"/>
+          <orientation value="0"/>
         </properties>
         <border type="none"/>
         <children>
-          <scrollpane id="db1d4">
+          <splitpane id="d68f0">
             <constraints>
               <splitpane position="left"/>
             </constraints>
-            <properties/>
+            <properties>
+              <continuousLayout value="false"/>
+              <oneTouchExpandable value="false"/>
+              <orientation value="1"/>
+              <resizeWeight value="0.0"/>
+            </properties>
             <border type="none"/>
             <children>
-              <component id="4d17f" class="javax.swing.JTable" binding="revenueTable">
-                <constraints/>
-                <properties>
-                  <autoCreateRowSorter value="true"/>
-                  <showVerticalLines value="true"/>
-                </properties>
-              </component>
+              <scrollpane id="db1d4">
+                <constraints>
+                  <splitpane position="left"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="4d17f" class="javax.swing.JTable" binding="revenueTable">
+                    <constraints/>
+                    <properties>
+                      <autoCreateRowSorter value="true"/>
+                      <showVerticalLines value="true"/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
+              <scrollpane id="de9c2">
+                <constraints>
+                  <splitpane position="right"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="d89d8" class="javax.swing.JTable" binding="taxTable">
+                    <constraints/>
+                    <properties>
+                      <autoCreateRowSorter value="true"/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
             </children>
-          </scrollpane>
-          <scrollpane id="de9c2">
+          </splitpane>
+          <scrollpane id="ca95b">
             <constraints>
               <splitpane position="right"/>
             </constraints>
             <properties/>
             <border type="none"/>
             <children>
-              <component id="d89d8" class="javax.swing.JTable" binding="taxTable">
+              <component id="c3796" class="javax.swing.JTable" binding="totalTable">
                 <constraints/>
                 <properties>
-                  <autoCreateRowSorter value="true"/>
+                  <preferredScrollableViewportSize width="450" height="200"/>
                 </properties>
               </component>
             </children>

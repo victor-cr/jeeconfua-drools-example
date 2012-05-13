@@ -7,6 +7,7 @@ import com.jeeconf.drools.bean.Party;
 import com.jeeconf.drools.bean.Person;
 import com.jeeconf.drools.bean.TaxRecord;
 import com.jeeconf.drools.bean.Taxpayer;
+import com.jeeconf.drools.bean.TotalRecord;
 import com.jeeconf.drools.bean.TransactionRecord;
 import com.jeeconf.drools.dao.PartyDao;
 import com.jeeconf.drools.dao.RevenueDao;
@@ -90,8 +91,7 @@ public class TaxService {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public List<TaxRecord> getTaxRecordList() {
+    public Result calculate() {
         StatefulKnowledgeSession session = knowledgeBase.newStatefulKnowledgeSession();
 
         try {
@@ -121,10 +121,30 @@ public class TaxService {
             session.fireAllRules();
 
             Collection taxRecords = session.getObjects(new ClassObjectFilter(TaxRecord.class));
+            Collection totalRecords = session.getObjects(new ClassObjectFilter(TotalRecord.class));
 
-            return new ArrayList<TaxRecord>(taxRecords);
+            return new Result(taxRecords, totalRecords);
         } finally {
             session.dispose();
+        }
+    }
+
+    public static class Result {
+        private final List<TaxRecord> taxRecordList;
+        private final List<TotalRecord> totalRecordList;
+
+        @SuppressWarnings("unchecked")
+        public Result(Collection taxRecordList, Collection totalRecordList) {
+            this.taxRecordList = new ArrayList<TaxRecord>(taxRecordList);
+            this.totalRecordList = new ArrayList<TotalRecord>(totalRecordList);
+        }
+
+        public List<TaxRecord> getTaxRecordList() {
+            return taxRecordList;
+        }
+
+        public List<TotalRecord> getTotalRecordList() {
+            return totalRecordList;
         }
     }
 }

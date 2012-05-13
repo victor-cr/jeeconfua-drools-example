@@ -17,6 +17,7 @@
                 <ref bean="julia.semechkina"/>
                 <ref bean="moses.wasserman"/>
                 <ref bean="victor.polischuk"/>
+                <ref bean="ilia.muromets"/>
             </list>
         </constructor-arg>
     </bean>

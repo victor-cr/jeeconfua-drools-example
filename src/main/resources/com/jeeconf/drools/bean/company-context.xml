@@ -5,9 +5,19 @@
 
     <bean id="infopulse" class="com.jeeconf.drools.bean.Company">
         <constructor-arg index="0" value="Infopulse Ukraine"/>
+        <constructor-arg index="1">
+            <list value-type="com.jeeconf.drools.bean.Role">
+                <value>IT</value>
+            </list>
+        </constructor-arg>
     </bean>
 
     <bean id="luxoft" class="com.jeeconf.drools.bean.Company">
         <constructor-arg index="0" value="Luxoft Ukraine"/>
+        <constructor-arg index="1">
+            <list value-type="com.jeeconf.drools.bean.Role">
+                <value>IT</value>
+            </list>
+        </constructor-arg>
     </bean>
 </beans>

@@ -1,5 +1,9 @@
 package com.jeeconf.drools.bean;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Abstract interface implementation
  *
@@ -8,9 +12,17 @@ package com.jeeconf.drools.bean;
 public abstract class Taxpayer implements Party {
     private final Class<? extends Taxpayer> clazz;
     private final String name;
+    private final List<Role> specialRoles;
 
     public Taxpayer(String name) {
+        this(name, null);
+    }
+
+    public Taxpayer(String name, List<Role> specialRoles) {
         this.name = name;
+        this.specialRoles = specialRoles != null
+                ? Collections.unmodifiableList(new ArrayList<Role>(specialRoles))
+                : Collections.<Role>emptyList();
 
         this.clazz = getClass();
     }
@@ -18,6 +30,11 @@ public abstract class Taxpayer implements Party {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public List<Role> getSpecialRoles() {
+        return specialRoles;
     }
 
     public abstract Category getCategory();

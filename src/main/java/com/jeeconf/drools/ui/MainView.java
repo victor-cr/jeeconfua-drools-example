@@ -25,7 +25,8 @@ public class MainView {
     }
 
     private final TaxTableModel taxTableModel = new TaxTableModel();
-    private final RevenueTableModel revenueTableModel = new RevenueTableModel();
+    private final TotalTableModel totalTableModel = new TotalTableModel();
+    private final TransactionTableModel transactionTableModel = new TransactionTableModel();
 
     private TaxService taxService;
 
@@ -36,6 +37,7 @@ public class MainView {
     private JComboBox counterPartiesBox;
     private JTable revenueTable;
     private JTable taxTable;
+    private JTable totalTable;
 
     public MainView() {
         addButton.addActionListener(new ActionListener() {
@@ -70,7 +72,8 @@ public class MainView {
     public void show() {
         initLists();
 
-        revenueTable.setModel(revenueTableModel);
+        revenueTable.setModel(transactionTableModel);
+        totalTable.setModel(totalTableModel);
         taxTable.setModel(taxTableModel);
 
         JFrame frame = new JFrame("Tax Preview");
@@ -97,7 +100,10 @@ public class MainView {
     }
 
     private void refreshData() {
-        revenueTableModel.refresh(taxService.getRevenueRecordList());
-        taxTableModel.refresh(taxService.getTaxRecordList());
+        TaxService.Result result = taxService.calculate();
+
+        transactionTableModel.refresh(taxService.getRevenueRecordList());
+        taxTableModel.refresh(result.getTaxRecordList());
+        totalTableModel.refresh(result.getTotalRecordList());
     }
 }

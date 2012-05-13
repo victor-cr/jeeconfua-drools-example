@@ -5,7 +5,12 @@
 
     <bean id="victor.polischuk" class="com.jeeconf.drools.bean.Entrepreneur">
         <constructor-arg index="0" value="Victor Polischuk"/>
-        <constructor-arg index="1" value="III"/>
+        <constructor-arg index="1">
+            <list value-type="com.jeeconf.drools.bean.Role">
+                <value>IT</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg index="2" value="III"/>
     </bean>
 
     <bean id="moses.wasserman" class="com.jeeconf.drools.bean.Entrepreneur">
@@ -16,5 +21,15 @@
     <bean id="julia.semechkina" class="com.jeeconf.drools.bean.Entrepreneur">
         <constructor-arg index="0" value="Julia Semechkina"/>
         <constructor-arg index="1" value="I"/>
+    </bean>
+
+    <bean id="ilia.muromets" class="com.jeeconf.drools.bean.Entrepreneur">
+        <constructor-arg index="0" value="Ilia Muromets"/>
+        <constructor-arg index="1">
+            <list value-type="com.jeeconf.drools.bean.Role">
+                <value>DISABLED</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg index="2" value="II"/>
     </bean>
 </beans>

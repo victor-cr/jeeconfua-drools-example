@@ -99,6 +99,7 @@ then
 end
 
 // Negative tax
+
 rule "Correct negative taxes"
 when
     $party : Taxpayer( category == Category.NONE )
@@ -109,4 +110,33 @@ when
                             result( sum ) )
 then
     insertLogical( new TaxRecord( $party, $sum.negate(), true ) );
+end
+
+// Total
+
+rule "Transaction records total"
+when
+    $party : Taxpayer()
+    not ( TotalRecord( party == $party ) )
+    $transactionSum : BigDecimal()
+                      from accumulate( TransactionRecord( party == $party, $amount : amount ),
+                                       init( BigDecimal sum = 0; ),
+                                       action( sum += $amount; ),
+                                       result( sum ) )
+then
+    insert( new TotalRecord( $party, $transactionSum, 0 ) );
+end
+
+rule "Tax records total"
+when
+    $party : Taxpayer()
+    $taxSum : BigDecimal()
+              from accumulate( TaxRecord( party == $party, $amount : amount ),
+                               init( BigDecimal sum = 0; ),
+                               action( sum += $amount; ),
+                               result( sum ) )
+    $total : TotalRecord( party == $party, taxAmount != $taxSum )
+then
+    retract( $total )
+    insert( new TotalRecord( $party, $total.transactionAmount, $taxSum ) )
 end

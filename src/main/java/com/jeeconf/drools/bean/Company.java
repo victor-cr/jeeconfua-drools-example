@@ -1,5 +1,7 @@
 package com.jeeconf.drools.bean;
 
+import java.util.List;
+
 /**
  * A party which does not physically exist
  *
@@ -8,6 +10,10 @@ package com.jeeconf.drools.bean;
 public class Company extends Taxpayer implements Party {
     public Company(String name) {
         super(name);
+    }
+
+    public Company(String name, List<Role> specialRoles) {
+        super(name, specialRoles);
     }
 
     @Override
